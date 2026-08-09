@@ -214,6 +214,53 @@ section[data-testid="stSidebar"] [data-testid="stPageLink-NavLink"]:hover {{
         transition: none;
     }}
 }}
+
+/* Light mode overrides — text colors adapt when Streamlit switches to light theme */
+@media (prefers-color-scheme: light) {{
+    .mimic-eyebrow {{
+        color: #0D9488;
+    }}
+    
+    .mimic-hero-title {{
+        color: #0F172A;
+    }}
+    
+    .mimic-hero-subtitle {{
+        color: #4B5563;
+    }}
+    
+    .mimic-section-title {{
+        color: #0F172A;
+    }}
+    
+    .mimic-nav-title {{
+        color: #0F172A;
+    }}
+    
+    .mimic-nav-desc {{
+        color: #6B7280;
+    }}
+    
+    .mimic-metric-value {{
+        color: #0F172A;
+    }}
+    
+    .mimic-metric-label {{
+        color: #6B7280;
+    }}
+    
+    .mimic-sidebar-brand-text {{
+        color: #0F172A;
+    }}
+    
+    .mimic-sidebar-section {{
+        color: #6B7280;
+    }}
+    
+    .mimic-sidebar-footer {{
+        color: #6B7280;
+    }}
+}}
 </style>
 """
 
