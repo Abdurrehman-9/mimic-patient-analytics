@@ -261,19 +261,49 @@ html.mimic-light-theme .mimic-sidebar-footer {{
     color: #6B7280 !important;
 }}
 
-/* Additional fallback: light theme via media query with !important */
-@media (prefers-color-scheme: light) {{
-    .mimic-eyebrow {{ color: #0D9488 !important; }}
-    .mimic-hero-title {{ color: #0F172A !important; }}
-    .mimic-hero-subtitle {{ color: #4B5563 !important; }}
-    .mimic-section-title {{ color: #0F172A !important; }}
-    .mimic-nav-title {{ color: #0F172A !important; }}
-    .mimic-nav-desc {{ color: #6B7280 !important; }}
-    .mimic-metric-card .mimic-metric-value {{ color: {COLORS["text"]} !important; }}
-    .mimic-metric-card .mimic-metric-label {{ color: {COLORS["muted"]} !important; }}
-    .mimic-sidebar-brand-text {{ color: #0F172A !important; }}
-    .mimic-sidebar-section {{ color: #6B7280 !important; }}
-    .mimic-sidebar-footer {{ color: #6B7280 !important; }}
+/* EXPLICIT DARK MODE STYLES - Ensure light colors in dark theme */
+html:not(.mimic-light-theme) .mimic-eyebrow {{
+    color: {COLORS["teal"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-hero-title {{
+    color: {COLORS["text"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-hero-subtitle {{
+    color: {COLORS["muted"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-section-title {{
+    color: {COLORS["text"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-nav-title {{
+    color: {COLORS["text"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-nav-desc {{
+    color: {COLORS["muted"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-metric-card .mimic-metric-value {{
+    color: {COLORS["text"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-metric-card .mimic-metric-label {{
+    color: {COLORS["muted"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-sidebar-brand-text {{
+    color: {COLORS["text"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-sidebar-section {{
+    color: {COLORS["muted"]} !important;
+}}
+
+html:not(.mimic-light-theme) .mimic-sidebar-footer {{
+    color: {COLORS["muted"]} !important;
 }}
 </style>
 """
