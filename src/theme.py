@@ -156,6 +156,59 @@ _CUSTOM_CSS = f"""
     margin-bottom: 0.6rem;
 }}
 
+.mimic-sidebar-brand {{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.2rem 0 1rem 0;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid {COLORS["panel_border"]};
+}}
+
+.mimic-sidebar-brand-icon {{
+    font-size: 1.3rem;
+}}
+
+.mimic-sidebar-brand-text {{
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: {COLORS["text"]};
+    letter-spacing: 0.01em;
+}}
+
+.mimic-sidebar-section {{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: {COLORS["muted"]};
+    margin: 1.1rem 0 0.3rem 0.1rem;
+}}
+
+.mimic-sidebar-footer {{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: {COLORS["muted"]};
+    margin-top: 1.4rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid {COLORS["panel_border"]};
+}}
+
+/* Lightly restyle st.page_link rows inside the sidebar so they
+   read as a designed nav list rather than plain link text. Only
+   the sidebar's own page-link rows are targeted, scoped through
+   the standard stSidebar container. */
+section[data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] {{
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+}}
+
+section[data-testid="stSidebar"] [data-testid="stPageLink-NavLink"]:hover {{
+    background-color: rgba(45, 212, 191, 0.08);
+}}
+
 @media (prefers-reduced-motion: reduce) {{
     .mimic-metric-card {{
         transition: none;
