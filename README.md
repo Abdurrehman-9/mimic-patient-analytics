@@ -1,6 +1,8 @@
 # AI for Smarter Patient Care    -- MIMIC-IV Patient Analytics
 ------------------------------------------------------------------------
 
+Link: "https://ai-for-smarter-patient-care.streamlit.app/"
+
 ## From scattered clinical records to one patient story
 
 > **A clinical analytics platform built on MIMIC-IV data to make complex
