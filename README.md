@@ -1,4 +1,4 @@
-# AI for Smarter Patient Care
+# AI for Smarter Patient Care    -- MIMIC-IV Patient Analytics
 ------------------------------------------------------------------------
 
 ## From scattered clinical records to one patient story
