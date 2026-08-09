@@ -34,13 +34,20 @@ ACCENT_CYCLE = [
 
 
 # ============================================================
-# BASE CSS
+# SHARED CSS
 # ============================================================
 
 _CUSTOM_CSS = f"""
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap');
+/* ==========================================================
+   FONT IMPORT
+   ========================================================== */
+
+@import url(
+    'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700'
+    '&family=IBM+Plex+Mono:wght@500;600;700&display=swap'
+);
 
 
 /* ==========================================================
@@ -54,7 +61,7 @@ _CUSTOM_CSS = f"""
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: {COLORS["teal"]} !important;
-    margin-bottom: 0.6rem;
+    margin: 0 0 0.6rem 0;
 }}
 
 
@@ -71,11 +78,22 @@ _CUSTOM_CSS = f"""
 .mimic-hero-subtitle {{
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 1.05rem;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--secondary-text-color) !important;
     max-width: 46rem;
     line-height: 1.6;
     margin: 0;
+}}
+
+
+/* ==========================================================
+   ECG DIVIDER
+   ========================================================== */
+
+.mimic-ecg {{
+    width: 100%;
+    overflow: hidden;
+    margin: 0.4rem 0 1.4rem 0;
 }}
 
 
@@ -91,7 +109,9 @@ _CUSTOM_CSS = f"""
     padding: 1.1rem 1.25rem;
     height: 100%;
     box-sizing: border-box;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
 }}
 
 
@@ -102,10 +122,16 @@ _CUSTOM_CSS = f"""
 
 
 .mimic-metric-icon {{
-    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif !important;
+    font-family:
+        'Segoe UI Emoji',
+        'Apple Color Emoji',
+        'Noto Color Emoji',
+        sans-serif !important;
+
     font-size: 1.3rem;
-    opacity: 0.9;
-    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    opacity: 0.95;
+    margin-bottom: 0.55rem;
 }}
 
 
@@ -113,8 +139,9 @@ _CUSTOM_CSS = f"""
     font-family: 'IBM Plex Mono', monospace !important;
     font-weight: 600;
     font-size: 1.65rem;
-    color: {COLORS["text"]} !important;
     line-height: 1.2;
+    color: {COLORS["text"]} !important;
+    margin: 0;
 }}
 
 
@@ -137,18 +164,26 @@ _CUSTOM_CSS = f"""
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-weight: 600;
     font-size: 1.1rem;
+    line-height: 1.3;
     color: var(--text-color) !important;
     margin: 0 0 0.9rem 0;
 }}
 
 
 /* ==========================================================
-   DASHBOARD NAVIGATION CARDS
+   NAVIGATION / DASHBOARD CARDS
    ========================================================== */
 
 .mimic-nav-icon {{
-    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif !important;
+    font-family:
+        'Segoe UI Emoji',
+        'Apple Color Emoji',
+        'Noto Color Emoji',
+        sans-serif !important;
+
     font-size: 1.6rem;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
 }}
 
 
@@ -156,6 +191,7 @@ _CUSTOM_CSS = f"""
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-weight: 600;
     font-size: 1.02rem;
+    line-height: 1.3;
     color: var(--text-color) !important;
     margin: 0.4rem 0 0.15rem 0;
 }}
@@ -164,14 +200,15 @@ _CUSTOM_CSS = f"""
 .mimic-nav-desc {{
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-size: 0.85rem;
-    color: var(--secondary-text-color) !important;
+    font-weight: 400;
     line-height: 1.45;
-    margin-bottom: 0.6rem;
+    color: var(--secondary-text-color) !important;
+    margin: 0 0 0.6rem 0;
 }}
 
 
 /* ==========================================================
-   SIDEBAR
+   SIDEBAR BRAND
    ========================================================== */
 
 .mimic-sidebar-brand {{
@@ -185,7 +222,14 @@ _CUSTOM_CSS = f"""
 
 
 .mimic-sidebar-brand-icon {{
+    font-family:
+        'Segoe UI Emoji',
+        'Apple Color Emoji',
+        'Noto Color Emoji',
+        sans-serif !important;
+
     font-size: 1.3rem;
+    line-height: 1;
 }}
 
 
@@ -193,10 +237,15 @@ _CUSTOM_CSS = f"""
     font-family: 'IBM Plex Sans', sans-serif !important;
     font-weight: 700;
     font-size: 1.02rem;
+    line-height: 1.2;
     color: var(--text-color) !important;
     letter-spacing: 0.01em;
 }}
 
+
+/* ==========================================================
+   SIDEBAR SECTION LABEL
+   ========================================================== */
 
 .mimic-sidebar-section {{
     font-family: 'IBM Plex Mono', monospace !important;
@@ -209,6 +258,10 @@ _CUSTOM_CSS = f"""
 }}
 
 
+/* ==========================================================
+   SIDEBAR FOOTER
+   ========================================================== */
+
 .mimic-sidebar-footer {{
     font-family: 'IBM Plex Mono', monospace !important;
     font-size: 0.72rem;
@@ -220,7 +273,7 @@ _CUSTOM_CSS = f"""
 
 
 /* ==========================================================
-   STREAMLIT PAGE LINKS
+   STREAMLIT SIDEBAR PAGE LINKS
    ========================================================== */
 
 section[data-testid="stSidebar"]
@@ -236,15 +289,16 @@ section[data-testid="stSidebar"]
 }}
 
 
-/* Make native Streamlit page links use the dashboard font */
+section[data-testid="stSidebar"]
 [data-testid="stPageLink-NavLink"],
+section[data-testid="stSidebar"]
 [data-testid="stPageLink-NavLink"] span {{
     font-family: 'IBM Plex Sans', sans-serif !important;
 }}
 
 
 /* ==========================================================
-   NATIVE STREAMLIT CAPTION
+   NATIVE STREAMLIT CAPTIONS
    ========================================================== */
 
 [data-testid="stCaptionContainer"] {{
@@ -253,7 +307,16 @@ section[data-testid="stSidebar"]
 
 
 /* ==========================================================
-   REDUCED MOTION
+   NATIVE STREAMLIT MARKDOWN
+   ========================================================== */
+
+.stMarkdown {{
+    font-family: 'IBM Plex Sans', sans-serif;
+}}
+
+
+/* ==========================================================
+   ACCESSIBILITY
    ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {{
@@ -274,26 +337,42 @@ section[data-testid="stSidebar"]
 
 def inject_theme():
     """
-    Inject the shared CSS theme.
+    Inject the shared MIMIC Analytics visual theme.
 
-    No JavaScript theme detection is used.
-    Streamlit's own theme variables control light/dark text.
+    This function intentionally does not use JavaScript for
+    light/dark-mode detection. Streamlit's own theme variables
+    are used for text and background-sensitive elements.
     """
 
     st.markdown(
         _CUSTOM_CSS,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 
 # ============================================================
-# ECG WAVEFORM
+# ECG DIVIDER
 # ============================================================
 
 def ecg_divider(accent=None, cycles=10, height=34):
     """
-    Render the ECG waveform used as the dashboard's
-    signature visual divider.
+    Generate the SVG ECG waveform used throughout the dashboard.
+
+    Parameters
+    ----------
+    accent : str, optional
+        Stroke color for the ECG line.
+
+    cycles : int
+        Number of waveform repetitions.
+
+    height : int
+        SVG height in pixels.
+
+    Returns
+    -------
+    str
+        HTML/SVG string.
     """
 
     accent = accent or COLORS["teal"]
@@ -301,131 +380,164 @@ def ecg_divider(accent=None, cycles=10, height=34):
     cycle_width = 160
     baseline = height / 2
 
-    segment_template = (
-        "L{x0},{b} "
-        "L{x1},{b} "
-        "L{x2},{small_dip} "
-        "L{x3},{big_peak} "
-        "L{x4},{deep_trough} "
-        "L{x5},{b} "
-        "L{x6},{small_bump} "
-        "L{x7},{b} "
-    )
-
-    path_parts = [f"M0,{baseline}"]
+    path_parts = [
+        f"M0,{baseline}"
+    ]
 
     peak_amplitude = baseline * 0.85
-    trough_amplitude = (height - baseline) * 0.7
+    trough_amplitude = (height - baseline) * 0.70
     small_dip_amplitude = (height - baseline) * 0.35
-    small_bump_amplitude = baseline * 0.3
+    small_bump_amplitude = baseline * 0.30
 
     for cycle in range(cycles):
 
         x0 = cycle * cycle_width
 
-        path_parts.append(
-            segment_template.format(
-                x0=x0,
-                x1=x0 + 34,
-                x2=x0 + 40,
-                x3=x0 + 48,
-                x4=x0 + 56,
-                x5=x0 + 62,
-                x6=x0 + 70,
-                x7=x0 + 160,
-                b=baseline,
-                small_dip=baseline + small_dip_amplitude,
-                big_peak=baseline - peak_amplitude,
-                deep_trough=baseline + trough_amplitude,
-                small_bump=baseline - small_bump_amplitude,
-            )
-        )
+        path_parts.extend([
+            f"L{x0 + 34},{baseline}",
+            f"L{x0 + 40},{baseline + small_dip_amplitude}",
+            f"L{x0 + 48},{baseline - peak_amplitude}",
+            f"L{x0 + 56},{baseline + trough_amplitude}",
+            f"L{x0 + 62},{baseline}",
+            f"L{x0 + 70},{baseline - small_bump_amplitude}",
+            f"L{x0 + 160},{baseline}",
+        ])
 
     path_d = " ".join(path_parts)
+
     total_width = cycles * cycle_width
 
-    svg = (
-        f'<div style="width:100%; overflow:hidden; '
-        f'margin:0.4rem 0 1.4rem 0;">'
-        f'<svg viewBox="0 0 {total_width} {height}" '
-        f'preserveAspectRatio="none" width="100%" height="{height}">'
-        f'<path d="{path_d}" fill="none" stroke="{accent}" '
-        f'stroke-width="1.6" stroke-linejoin="round" '
-        f'stroke-linecap="round" opacity="0.85"/>'
+    return (
+        f'<div class="mimic-ecg">'
+        f'<svg '
+        f'viewBox="0 0 {total_width} {height}" '
+        f'preserveAspectRatio="none" '
+        f'width="100%" '
+        f'height="{height}">'
+        f'<path '
+        f'd="{path_d}" '
+        f'fill="none" '
+        f'stroke="{accent}" '
+        f'stroke-width="1.6" '
+        f'stroke-linejoin="round" '
+        f'stroke-linecap="round" '
+        f'opacity="0.85"/>'
         f'</svg>'
         f'</div>'
     )
 
-    return svg
-
 
 # ============================================================
-# HERO HEADER
+# HERO
 # ============================================================
 
-def render_hero(eyebrow, title, subtitle, accent=None):
+def render_hero(
+    eyebrow,
+    title,
+    subtitle,
+    accent=None,
+):
     """
-    Render the page hero:
-    eyebrow + title + subtitle + ECG divider.
+    Render the standard dashboard hero section.
+
+    Includes:
+        - eyebrow
+        - title
+        - subtitle
+        - ECG divider
     """
 
     accent = accent or COLORS["teal"]
 
     # IMPORTANT:
-    # Keep the HTML unindented. This prevents Streamlit's
-    # Markdown parser from interpreting it as a code block.
+    # Keep these HTML elements as one continuous string.
+    # Do not indent the HTML inside a multiline Markdown
+    # string, otherwise Streamlit can interpret it as code.
+
     hero_html = (
-        f'<div class="mimic-eyebrow">{eyebrow}</div>'
-        f'<div class="mimic-hero-title">{title}</div>'
-        f'<p class="mimic-hero-subtitle">{subtitle}</p>'
+        f'<div class="mimic-eyebrow">'
+        f'{eyebrow}'
+        f'</div>'
+
+        f'<div class="mimic-hero-title">'
+        f'{title}'
+        f'</div>'
+
+        f'<p class="mimic-hero-subtitle">'
+        f'{subtitle}'
+        f'</p>'
     )
 
     st.markdown(
         hero_html,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
     st.markdown(
         ecg_divider(accent=accent),
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 
 # ============================================================
-# METRIC CARD
+# SINGLE METRIC CARD
 # ============================================================
 
-def render_metric_card(icon, value, label, accent=None):
+def render_metric_card(
+    icon,
+    value,
+    label,
+    accent=None,
+):
     """
-    Render one KPI card.
+    Render a single KPI metric card.
 
-    Example:
-        with col:
-            render_metric_card(
-                "🏨",
-                "275",
-                "Admissions",
-                accent="#38BDF8"
-            )
+    Parameters
+    ----------
+    icon : str
+        Emoji/icon displayed at the top.
+
+    value : str
+        Main KPI value.
+
+    label : str
+        KPI label.
+
+    accent : str, optional
+        Left-border accent color.
     """
 
     accent = accent or COLORS["teal"]
 
     # IMPORTANT:
-    # Keep this HTML as one continuous string.
-    # Do not indent the <div> tags inside a multiline string.
+    # This is intentionally built as one continuous HTML
+    # string. Do NOT indent the HTML inside a multiline
+    # f-string. That was the source of the visible
+    # <div class="..."> problem.
+
     card_html = (
-        f'<div class="mimic-metric-card" '
+        f'<div '
+        f'class="mimic-metric-card" '
         f'style="--mimic-accent: {accent};">'
-        f'<div class="mimic-metric-icon">{icon}</div>'
-        f'<div class="mimic-metric-value">{value}</div>'
-        f'<div class="mimic-metric-label">{label}</div>'
+        
+        f'<div class="mimic-metric-icon">'
+        f'{icon}'
+        f'</div>'
+
+        f'<div class="mimic-metric-value">'
+        f'{value}'
+        f'</div>'
+
+        f'<div class="mimic-metric-label">'
+        f'{label}'
+        f'</div>'
+
         f'</div>'
     )
 
     st.markdown(
         card_html,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
 
@@ -433,17 +545,23 @@ def render_metric_card(icon, value, label, accent=None):
 # METRIC ROW
 # ============================================================
 
-def metric_row(columns, cards):
+def metric_row(
+    columns,
+    cards,
+):
     """
-    Render a row of metric cards across pre-created columns.
+    Render multiple metric cards across Streamlit columns.
 
-    Each card must contain:
-        icon
-        value
-        label
+    Expected card structure:
 
-    And may optionally contain:
-        accent
+        {
+            "icon": "👥",
+            "value": "100",
+            "label": "Patients",
+            "accent": "#2DD4BF"
+        }
+
+    The accent key is optional.
     """
 
     for col, card in zip(columns, cards):
@@ -454,5 +572,5 @@ def metric_row(columns, cards):
                 icon=card["icon"],
                 value=card["value"],
                 label=card["label"],
-                accent=card.get("accent")
+                accent=card.get("accent"),
             )
