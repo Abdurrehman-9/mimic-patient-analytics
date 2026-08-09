@@ -240,12 +240,13 @@ html.mimic-light-theme .mimic-nav-desc {{
     color: #6B7280 !important;
 }}
 
-html.mimic-light-theme .mimic-metric-value {{
-    color: #0F172A !important;
+/* IMPORTANT: Metric cards have dark backgrounds, so their text stays LIGHT even in light mode */
+html.mimic-light-theme .mimic-metric-card .mimic-metric-value {{
+    color: {COLORS["text"]} !important;
 }}
 
-html.mimic-light-theme .mimic-metric-label {{
-    color: #6B7280 !important;
+html.mimic-light-theme .mimic-metric-card .mimic-metric-label {{
+    color: {COLORS["muted"]} !important;
 }}
 
 html.mimic-light-theme .mimic-sidebar-brand-text {{
@@ -268,8 +269,8 @@ html.mimic-light-theme .mimic-sidebar-footer {{
     .mimic-section-title {{ color: #0F172A !important; }}
     .mimic-nav-title {{ color: #0F172A !important; }}
     .mimic-nav-desc {{ color: #6B7280 !important; }}
-    .mimic-metric-value {{ color: #0F172A !important; }}
-    .mimic-metric-label {{ color: #6B7280 !important; }}
+    .mimic-metric-card .mimic-metric-value {{ color: {COLORS["text"]} !important; }}
+    .mimic-metric-card .mimic-metric-label {{ color: {COLORS["muted"]} !important; }}
     .mimic-sidebar-brand-text {{ color: #0F172A !important; }}
     .mimic-sidebar-section {{ color: #6B7280 !important; }}
     .mimic-sidebar-footer {{ color: #6B7280 !important; }}
