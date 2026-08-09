@@ -1,6 +1,6 @@
 # ============================================================
 # MIMIC PATIENT ANALYTICS
-# CLINICAL EVENTS & LABORATORY MODULE
+# CLINICAL EVENTS & LABORATORY ANALYTICS
 # ============================================================
 
 import pandas as pd
@@ -12,7 +12,7 @@ import pandas as pd
 
 def load_chartevents(load_dataset):
     """
-    Load the chartevents dataset.
+    Load chartevents using the central data loader.
     """
 
     return load_dataset("chartevents")
@@ -20,32 +20,38 @@ def load_chartevents(load_dataset):
 
 def chartevent_summary(chartevents):
     """
-    Generate high-level statistics for chart events.
+    Generate high-level statistics for chartevents.
     """
 
     return {
-        "total_events": len(chartevents),
+
+        "total_events": len(
+            chartevents
+        ),
 
         "unique_patients": (
-            chartevents["subject_id"]
-            .nunique()
+            chartevents[
+                "subject_id"
+            ].nunique()
         ),
 
         "unique_admissions": (
-            chartevents["hadm_id"]
-            .nunique()
+            chartevents[
+                "hadm_id"
+            ].nunique()
         ),
 
         "unique_items": (
-            chartevents["itemid"]
-            .nunique()
+            chartevents[
+                "itemid"
+            ].nunique()
         )
     }
 
 
 def chartevents_by_item(chartevents):
     """
-    Count chart events by item.
+    Count chart events by item ID.
     """
 
     return (
@@ -66,15 +72,17 @@ def build_chart_catalog(
     d_items
 ):
     """
-    Build a human-readable catalog of chart events.
+    Create a human-readable chart-event catalog.
 
-    Combines event counts with the d_items dictionary.
+    Combines chartevent frequencies with
+    metadata from d_items.
     """
 
     catalog = (
         chartevents
         .groupby("itemid")
         .agg(
+
             event_count=(
                 "itemid",
                 "size"
@@ -92,6 +100,7 @@ def build_chart_catalog(
         )
         .reset_index()
         .merge(
+
             d_items[
                 [
                     "itemid",
@@ -101,8 +110,11 @@ def build_chart_catalog(
                     "param_type"
                 ]
             ],
+
             on="itemid",
+
             how="left",
+
             validate="many_to_one"
         )
         .sort_values(
@@ -120,7 +132,7 @@ def build_chart_catalog(
 
 def load_labevents(load_dataset):
     """
-    Load the labevents dataset.
+    Load labevents using the central data loader.
     """
 
     return load_dataset("labevents")
@@ -132,28 +144,34 @@ def lab_event_summary(labevents):
     """
 
     return {
-        "total_lab_events": len(labevents),
+
+        "total_lab_events": len(
+            labevents
+        ),
 
         "unique_patients": (
-            labevents["subject_id"]
-            .nunique()
+            labevents[
+                "subject_id"
+            ].nunique()
         ),
 
         "unique_admissions": (
-            labevents["hadm_id"]
-            .nunique()
+            labevents[
+                "hadm_id"
+            ].nunique()
         ),
 
         "unique_lab_items": (
-            labevents["itemid"]
-            .nunique()
+            labevents[
+                "itemid"
+            ].nunique()
         )
     }
 
 
 def lab_events_by_item(labevents):
     """
-    Count laboratory events by item.
+    Count laboratory events by item ID.
     """
 
     return (
@@ -170,7 +188,7 @@ def lab_events_by_item(labevents):
 
 
 # ============================================================
-# LABORATORY METADATA
+# LABORATORY METADATA ENRICHMENT
 # ============================================================
 
 def enrich_labevents(
@@ -179,7 +197,7 @@ def enrich_labevents(
 ):
     """
     Add human-readable laboratory metadata
-    to laboratory events.
+    to every laboratory observation.
     """
 
     lab_dictionary = (
@@ -197,27 +215,35 @@ def enrich_labevents(
     )
 
     enriched = labevents.merge(
+
         lab_dictionary,
+
         on="itemid",
+
         how="left",
+
         validate="many_to_one"
     )
 
     return enriched
 
 
+# ============================================================
+# LAB TEST CATALOG
+# ============================================================
+
 def lab_test_catalog(
     labevents,
     d_labitems
 ):
     """
-    Create a catalog of laboratory tests.
+    Create a laboratory test catalog.
 
     Includes:
         - observation count
         - unique patients
         - numeric observations
-        - test metadata
+        - laboratory metadata
     """
 
     enriched = enrich_labevents(
@@ -228,15 +254,18 @@ def lab_test_catalog(
     catalog = (
         enriched
         .groupby(
+
             [
                 "itemid",
                 "label",
                 "fluid",
                 "category"
             ],
+
             dropna=False
         )
         .agg(
+
             observation_count=(
                 "itemid",
                 "size"
@@ -249,7 +278,8 @@ def lab_test_catalog(
 
             numeric_observations=(
                 "valuenum",
-                lambda x: x.notna().sum()
+                lambda x:
+                    x.notna().sum()
             )
         )
         .reset_index()
@@ -272,6 +302,17 @@ def numeric_lab_values(
     """
     Return laboratory observations
     with valid numeric values.
+
+    This function intentionally accepts either:
+
+        labevents
+
+    or:
+
+        labs_with_labels
+
+    because the original notebook passes
+    the enriched laboratory table.
     """
 
     df = labevents.copy()
@@ -287,7 +328,67 @@ def numeric_lab_values(
 
 
 # ============================================================
-# LABORATORY TEST SUMMARY
+# ORIGINAL LAB VALUE SUMMARY
+# ============================================================
+
+def lab_value_summary(
+    numeric_labs
+):
+    """
+    Summarize numeric laboratory values.
+
+    This preserves the original function expected
+    by the earlier notebook.
+
+    Statistics:
+        count
+        mean
+        median
+        standard deviation
+        minimum
+        maximum
+    """
+
+    group_columns = [
+        "itemid"
+    ]
+
+    # Add metadata columns only if they exist.
+    for column in [
+        "label",
+        "fluid",
+        "category"
+    ]:
+
+        if column in numeric_labs.columns:
+
+            group_columns.append(
+                column
+            )
+
+    summary = (
+        numeric_labs
+        .groupby(
+            group_columns
+        )["valuenum"]
+        .agg(
+            [
+                "count",
+                "mean",
+                "median",
+                "std",
+                "min",
+                "max"
+            ]
+        )
+        .reset_index()
+    )
+
+    return summary
+
+
+# ============================================================
+# COMPREHENSIVE LABORATORY TEST SUMMARY
 # ============================================================
 
 def laboratory_test_summary(
@@ -295,7 +396,7 @@ def laboratory_test_summary(
     d_labitems
 ):
     """
-    Create a summary of laboratory tests.
+    Create a comprehensive summary of laboratory tests.
 
     Includes:
         - total observations
@@ -318,15 +419,18 @@ def laboratory_test_summary(
     summary = (
         df
         .groupby(
+
             [
                 "itemid",
                 "label",
                 "fluid",
                 "category"
             ],
+
             dropna=False
         )
         .agg(
+
             total_observations=(
                 "itemid",
                 "size"
@@ -334,7 +438,8 @@ def laboratory_test_summary(
 
             numeric_observations=(
                 "valuenum",
-                lambda x: x.notna().sum()
+                lambda x:
+                    x.notna().sum()
             ),
 
             unique_patients=(
@@ -344,17 +449,22 @@ def laboratory_test_summary(
 
             abnormal_observations=(
                 "flag",
-                lambda x: (
-                    x == "abnormal"
-                ).sum()
+                lambda x:
+                    (
+                        x == "abnormal"
+                    ).sum()
             )
         )
         .reset_index()
     )
 
     summary["abnormal_rate_pct"] = (
-        summary["abnormal_observations"]
-        / summary["total_observations"]
+        summary[
+            "abnormal_observations"
+        ]
+        / summary[
+            "total_observations"
+        ]
         * 100
     )
 
@@ -374,8 +484,8 @@ def patient_lab_summary(
     """
     Create patient-level laboratory statistics.
 
-    Abnormal results are counted only when
-    the flag explicitly equals 'abnormal'.
+    Only explicit 'abnormal' flags are counted
+    as abnormal results.
     """
 
     df = numeric_lab_values(
@@ -386,6 +496,7 @@ def patient_lab_summary(
         df
         .groupby("subject_id")
         .agg(
+
             total_lab_events=(
                 "itemid",
                 "count"
@@ -398,9 +509,10 @@ def patient_lab_summary(
 
             abnormal_results=(
                 "flag",
-                lambda x: (
-                    x == "abnormal"
-                ).sum()
+                lambda x:
+                    (
+                        x == "abnormal"
+                    ).sum()
             )
         )
         .reset_index()
@@ -410,15 +522,14 @@ def patient_lab_summary(
 
 
 # ============================================================
-# LABORATORY REFERENCE RANGE SUMMARY
+# REFERENCE RANGE SUMMARY
 # ============================================================
 
 def reference_range_summary(
     labevents
 ):
     """
-    Summarize availability of laboratory
-    reference ranges.
+    Summarize reference-range availability.
     """
 
     has_lower = (
@@ -439,6 +550,7 @@ def reference_range_summary(
     )
 
     return {
+
         "with_reference_range": int(
             has_range.sum()
         ),
@@ -461,16 +573,19 @@ def laboratory_flag_summary(
     labevents
 ):
     """
-    Count laboratory observations
-    by their flag value.
+    Count observations by laboratory flag.
     """
 
     return (
-        labevents["flag"]
+        labevents[
+            "flag"
+        ]
         .value_counts(
             dropna=False
         )
-        .rename_axis("flag")
+        .rename_axis(
+            "flag"
+        )
         .reset_index(
             name="observation_count"
         )
