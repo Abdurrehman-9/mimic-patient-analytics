@@ -182,3 +182,158 @@ def lab_value_summary(labevents):
         ])
         .reset_index()
     )
+
+
+# ============================================================
+# LABORATORY METADATA ENRICHMENT
+# ============================================================
+
+def enrich_labevents(labevents, d_labitems):
+    """
+    Add human-readable laboratory metadata
+    to laboratory events.
+    """
+
+    lab_dictionary = d_labitems[
+        [
+            "itemid",
+            "label",
+            "fluid",
+            "category"
+        ]
+    ].drop_duplicates(
+        subset=["itemid"]
+    )
+
+    enriched = labevents.merge(
+        lab_dictionary,
+        on="itemid",
+        how="left",
+        validate="many_to_one"
+    )
+
+    return enriched
+
+
+# ============================================================
+# LABORATORY TEST CATALOG
+# ============================================================
+
+def lab_test_catalog(labevents, d_labitems):
+    """
+    Create a catalog of laboratory tests with
+    their metadata and observation counts.
+    """
+
+    enriched = enrich_labevents(
+        labevents,
+        d_labitems
+    )
+
+    catalog = (
+        enriched
+        .groupby(
+            [
+                "itemid",
+                "label",
+                "fluid",
+                "category"
+            ],
+            dropna=False
+        )
+        .agg(
+            observation_count=(
+                "itemid",
+                "size"
+            ),
+
+            unique_patients=(
+                "subject_id",
+                "nunique"
+            ),
+
+            numeric_observations=(
+                "valuenum",
+                lambda x: x.notna().sum()
+            )
+        )
+        .reset_index()
+        .sort_values(
+            "observation_count",
+            ascending=False
+        )
+    )
+
+    return catalog
+
+
+# ============================================================
+# LABORATORY TEST SUMMARY (WITH ABNORMAL RATES)
+# ============================================================
+
+def laboratory_test_summary(
+    labevents,
+    d_labitems
+):
+    """
+    Create a summary of laboratory tests including
+    numeric statistics and abnormal observations.
+    """
+
+    df = enrich_labevents(
+        labevents,
+        d_labitems
+    ).copy()
+
+    df["valuenum"] = pd.to_numeric(
+        df["valuenum"],
+        errors="coerce"
+    )
+
+    summary = (
+        df
+        .groupby(
+            [
+                "itemid",
+                "label",
+                "fluid",
+                "category"
+            ],
+            dropna=False
+        )
+        .agg(
+            total_observations=(
+                "itemid",
+                "size"
+            ),
+
+            numeric_observations=(
+                "valuenum",
+                lambda x: x.notna().sum()
+            ),
+
+            unique_patients=(
+                "subject_id",
+                "nunique"
+            ),
+
+            abnormal_observations=(
+                "flag",
+                lambda x: (
+                    x == "abnormal"
+                ).sum()
+            )
+        )
+        .reset_index()
+    )
+
+    summary["abnormal_rate_pct"] = (
+        summary["abnormal_observations"]
+        / summary["total_observations"]
+        * 100
+    )
+
+    return summary.sort_values(
+        "total_observations",
+        ascending=False
+    )
