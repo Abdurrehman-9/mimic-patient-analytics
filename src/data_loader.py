@@ -4,6 +4,7 @@
 # ============================================================
 
 import pandas as pd
+import streamlit as st
 
 
 # ============================================================
@@ -71,12 +72,13 @@ DATASETS = {
 
 
 # ============================================================
-# LOAD DATASET
+# LOAD DATASET (CACHED)
 # ============================================================
 
+@st.cache_data
 def load_dataset(dataset_name):
     """
-    Load a registered dataset directly from GitHub.
+    Load a registered dataset directly from GitHub with caching.
 
     Parameters
     ----------
