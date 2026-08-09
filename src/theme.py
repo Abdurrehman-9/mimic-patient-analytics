@@ -215,51 +215,64 @@ section[data-testid="stSidebar"] [data-testid="stPageLink-NavLink"]:hover {{
     }}
 }}
 
-/* Light mode overrides — text colors adapt when Streamlit switches to light theme */
+/* Light mode overrides — Dynamic detection via JavaScript marker class */
+html.mimic-light-theme .mimic-eyebrow {{
+    color: #0D9488 !important;
+}}
+
+html.mimic-light-theme .mimic-hero-title {{
+    color: #0F172A !important;
+}}
+
+html.mimic-light-theme .mimic-hero-subtitle {{
+    color: #4B5563 !important;
+}}
+
+html.mimic-light-theme .mimic-section-title {{
+    color: #0F172A !important;
+}}
+
+html.mimic-light-theme .mimic-nav-title {{
+    color: #0F172A !important;
+}}
+
+html.mimic-light-theme .mimic-nav-desc {{
+    color: #6B7280 !important;
+}}
+
+html.mimic-light-theme .mimic-metric-value {{
+    color: #0F172A !important;
+}}
+
+html.mimic-light-theme .mimic-metric-label {{
+    color: #6B7280 !important;
+}}
+
+html.mimic-light-theme .mimic-sidebar-brand-text {{
+    color: #0F172A !important;
+}}
+
+html.mimic-light-theme .mimic-sidebar-section {{
+    color: #6B7280 !important;
+}}
+
+html.mimic-light-theme .mimic-sidebar-footer {{
+    color: #6B7280 !important;
+}}
+
+/* Additional fallback: light theme via media query with !important */
 @media (prefers-color-scheme: light) {{
-    .mimic-eyebrow {{
-        color: #0D9488;
-    }}
-    
-    .mimic-hero-title {{
-        color: #0F172A;
-    }}
-    
-    .mimic-hero-subtitle {{
-        color: #4B5563;
-    }}
-    
-    .mimic-section-title {{
-        color: #0F172A;
-    }}
-    
-    .mimic-nav-title {{
-        color: #0F172A;
-    }}
-    
-    .mimic-nav-desc {{
-        color: #6B7280;
-    }}
-    
-    .mimic-metric-value {{
-        color: #0F172A;
-    }}
-    
-    .mimic-metric-label {{
-        color: #6B7280;
-    }}
-    
-    .mimic-sidebar-brand-text {{
-        color: #0F172A;
-    }}
-    
-    .mimic-sidebar-section {{
-        color: #6B7280;
-    }}
-    
-    .mimic-sidebar-footer {{
-        color: #6B7280;
-    }}
+    .mimic-eyebrow {{ color: #0D9488 !important; }}
+    .mimic-hero-title {{ color: #0F172A !important; }}
+    .mimic-hero-subtitle {{ color: #4B5563 !important; }}
+    .mimic-section-title {{ color: #0F172A !important; }}
+    .mimic-nav-title {{ color: #0F172A !important; }}
+    .mimic-nav-desc {{ color: #6B7280 !important; }}
+    .mimic-metric-value {{ color: #0F172A !important; }}
+    .mimic-metric-label {{ color: #6B7280 !important; }}
+    .mimic-sidebar-brand-text {{ color: #0F172A !important; }}
+    .mimic-sidebar-section {{ color: #6B7280 !important; }}
+    .mimic-sidebar-footer {{ color: #6B7280 !important; }}
 }}
 </style>
 """
@@ -275,6 +288,39 @@ def inject_theme():
     """
 
     st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
+    
+    # Inject JavaScript to dynamically detect theme and apply marker class
+    theme_detector = """
+    <script>
+    // Detect Streamlit's light theme and apply marker class
+    function applyThemeMarker() {
+        const html = document.documentElement;
+        const style = window.getComputedStyle(document.body);
+        const bgColor = style.backgroundColor;
+        
+        // Check if background is light (white or near-white)
+        const rgb = bgColor.match(/\\d+/g);
+        if (rgb) {
+            const [r, g, b] = rgb.map(Number);
+            const brightness = (r + g + b) / 3;
+            if (brightness > 200) {
+                html.classList.add('mimic-light-theme');
+            } else {
+                html.classList.remove('mimic-light-theme');
+            }
+        }
+    }
+    
+    // Run on load and when theme might change
+    applyThemeMarker();
+    window.addEventListener('load', applyThemeMarker);
+    
+    // Check every 500ms for theme changes (Streamlit theme toggle)
+    setInterval(applyThemeMarker, 500);
+    </script>
+    """
+    
+    st.markdown(theme_detector, unsafe_allow_html=True)
 
 
 # ============================================================
